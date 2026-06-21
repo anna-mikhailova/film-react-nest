@@ -11,4 +11,10 @@ export default defineConfig({
       }
     }
   },
+  server: {
+    proxy: {
+      '/api': 'http://localhost:3000',
+      '/content': 'http://localhost:3000',
+    }
+  }
 })
