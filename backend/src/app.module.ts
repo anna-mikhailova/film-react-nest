@@ -22,19 +22,16 @@ import { Schedule } from './films/entities/schedule.entity';
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => {
-        const url = new URL(config.get<string>('DATABASE_URL'));
-        return {
-          type: config.get<string>('DATABASE_DRIVER') as 'postgres',
-          host: url.hostname,
-          port: Number(url.port) || 5432,
-          database: url.pathname.replace(/^\//, ''),
-          username: config.get<string>('DATABASE_USERNAME'),
-          password: config.get<string>('DATABASE_PASSWORD'),
-          entities: [Film, Schedule],
-          synchronize: false,
-        };
-      },
+      useFactory: (config: ConfigService) => ({
+        type: config.get<string>('DATABASE_DRIVER') as 'postgres',
+        host: config.get<string>('DATABASE_HOST'),
+        port: config.get<number>('DATABASE_PORT'),
+        database: config.get<string>('DATABASE_NAME'),
+        username: config.get<string>('DATABASE_USERNAME'),
+        password: config.get<string>('DATABASE_PASSWORD'),
+        entities: [Film, Schedule],
+        synchronize: false,
+      }),
     }),
     FilmsModule,
     OrderModule,
